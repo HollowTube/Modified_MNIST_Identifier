@@ -27,7 +27,7 @@ def getBodyContours(bw_img):
     for cnt in contours:
         if cv2.contourArea(cnt) > 20:
             x, y, w, h = cv2.boundingRect(cnt)
-            box = [x, y, w, h]
+            box = [x, y, x+w, h+y,h,w]
             # rect = cv2.minAreaRect(cnt)
             # box = cv2.boxPoints(rect)
             box = np.int0(box)
@@ -37,13 +37,13 @@ def getBodyContours(bw_img):
 
 
 boxes = getBodyContours(img_bin)
-topbox = sorted(boxes,key=lambda x: max(x[2],x[3]))[-1]
+topbox = sorted(boxes,key=lambda x: max(x[4],x[5]))[-1]
 
 # for box in boxes:
 #     cv2.drawContours(img, [box], 0, (0,255,0), 1)
 
-x, y, w, h = map(int, topbox)
-cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+x, y, x2, y2,w,h = map(int, topbox)
+cv2.rectangle(img, (x, y), (x2, y2), (0, 255, 0), 2)
 
 cv2.imshow('img', img / 255)
 cv2.imshow('bw', img_bin)
